@@ -7,17 +7,18 @@ const getValueColor = value => {
 }
 
 class Counter extends React.Component {
-  state = { value: 0, delta: 0, autoIncreaseOn: false }
+  state = {
+    value: 0,
+    delta: this.props.initialDelta,
+    autoIncreaseOn: this.props.initialAutoIncreaseOn,
+  }
   interval = null
 
   handleUpdateValue = () => {
     const currentValue = this.state.value
     this.setState({ value: currentValue + this.state.delta })
   }
-  handleReset = () => {
-    const currentValue = this.state.value
-    this.setState({ value: 0 })
-  }
+
   handleDeltaChange = delta =>
     this.setState({ delta: this.state.delta + delta })
 
@@ -34,10 +35,39 @@ class Counter extends React.Component {
     })
   }
 
+  // componentDidMount = () => {
+  //   console.log('componentDidMount')
+  //   this.interval = setInterval(() => {
+  //     this.handleUpdateValue()
+  //   }, 500)
+  // }
+  componentDidMount = () => {
+    if (this.state.autoIncreaseOn)
+      this.interval = setInterval(() => {
+        this.handleUpdateValue()
+      }, 500)
+  }
+
+  
   render() {
-    const { value, delta,autoIncreaseOn } = this.state
+    console.log('render')
+    const { value, delta, autoIncreaseOn } = this.state
+
     return (
-      <div>
+      <div
+        style={{
+          paddingBottom: '30px',
+          borderBottom: '1px solid #fff',
+        }}
+      >
+        <div
+          style={{
+            fontWeight: 'bold',
+            marginBottom: 16,
+          }}
+        >
+          {this.props.name}
+        </div>
         <div>
           Current value:{' '}
           <span style={{ color: getValueColor(value) }}>{value}</span>
@@ -45,9 +75,8 @@ class Counter extends React.Component {
 
         <div>
           <button onClick={this.handleUpdateValue}>
-            Update + ({value + delta})
+            Update ({value + delta})
           </button>
-          <button onClick={this.handleReset}>Reset</button>
         </div>
 
         <div>
@@ -62,6 +91,11 @@ class Counter extends React.Component {
         </div>
       </div>
     )
+  }
+
+  componentWillUnmount = () => {
+    console.log('componentWillUnmount')
+    clearInterval(this.interval)
   }
 }
 
