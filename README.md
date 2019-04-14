@@ -76,3 +76,4 @@ git push
 
 ## Lesson four
 - prettier
+- dua delta ra ngoai app -> su dung props de cap nhat data
