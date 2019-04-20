@@ -9,18 +9,20 @@ const getValueColor = value => {
 class Counter extends React.Component {
   state = {
     value: 0,
-    delta: this.props.initialDelta,
+    // delta: this.props.initialDelta,
     autoIncreaseOn: this.props.initialAutoIncreaseOn,
   }
   interval = null
 
   handleUpdateValue = () => {
     const currentValue = this.state.value
-    this.setState({ value: currentValue + this.state.delta })
+    this.setState({ value: currentValue + this.props.delta })
   }
-
-  handleDeltaChange = delta =>
-    this.setState({ delta: this.state.delta + delta })
+  handleDeltaChange = delta => {
+    this.props.onDeltaChange(this.props.delta + delta)
+  }
+  // handleDeltaChange = delta =>
+  //   this.setState({ delta: this.state.delta + delta })
 
   handleToggleAutoIncrease = () => {
     // * this.setState(nextState, callback)
@@ -48,10 +50,10 @@ class Counter extends React.Component {
       }, 500)
   }
 
-  
   render() {
     console.log('render')
-    const { value, delta, autoIncreaseOn } = this.state
+    const { value, autoIncreaseOn } = this.state
+    const { delta } = this.props
 
     return (
       <div
